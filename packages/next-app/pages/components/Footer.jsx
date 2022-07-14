@@ -5,7 +5,7 @@ function Footer() {
   return (
     <>
       <Divider w={"80%"} mx={"auto"} />
-      <Container py={"2rem"}>
+      <Container py={"1rem"}>
         <Text textAlign={"center"} fontSize={"1rem"}>
           Build with 💜 by{" "}
           <Link isExternal href="https://twitter.com/LakshayMaini_">
