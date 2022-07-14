@@ -11,18 +11,20 @@ import React, { useEffect } from "react";
 import { useConnect } from "wagmi";
 import Stripes from "./Stripes";
 import { useLoadingContext } from "../../context/loading";
+import { useRouter } from "next/router";
 
 function Hero() {
   const { isConnected } = useConnect();
   const toast = useToast();
   const { setLoading } = useLoadingContext();
+  const router = useRouter();
 
   useEffect(() => {
     document.addEventListener("mousemove", parallax);
   }, []);
 
   useEffect(() => {
-    // router.prefetch("/feed");
+    router.prefetch("/courses");
     setTimeout(() => {
       setLoading(false);
     }, 1500);
@@ -45,9 +47,13 @@ function Hero() {
             status: "success",
             variant: "subtle",
             position: "top",
-            duration: 4000,
+            duration: 3500,
           });
         }, 3000);
+        setTimeout(() => {
+          setLoading(true);
+          router.push("/courses");
+        }, 6500);
       }, 1700);
     }
   }, [isConnected]);

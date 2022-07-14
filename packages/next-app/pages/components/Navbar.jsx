@@ -1,25 +1,31 @@
 import React from "react";
-import { Box, Flex, Heading, Image } from "@chakra-ui/react";
+import { Flex, Heading, Image, Link } from "@chakra-ui/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 function Navbar() {
   return (
     <>
       <Flex px={"4em"} py={"1.5em"} justifyContent={"space-between"}>
-        <Flex alignItems={"center"}>
-          <Image alt="logo" boxSize={"30px"} src={"/assets/community.png"} />
-          <Heading
-            ml={"10px"}
-            fontWeight={700}
-            className={"h-shadow-black"}
-            fontFamily={"Philosopher !important"}
-          >
-            Learnify
-          </Heading>
-        </Flex>
+        <Link href="/" _hover={{ textDecoration: "none" }}>
+          <Flex alignItems={"center"}>
+            <Image
+              className="rotate"
+              alt="logo"
+              boxSize={"30px"}
+              src={"/assets/community.png"}
+            />
+            <Heading
+              ml={"15px"}
+              fontWeight={700}
+              className={"h-shadow-black"}
+              fontFamily={"Philosopher !important"}
+            >
+              Learnify
+            </Heading>
+          </Flex>
+        </Link>
 
-        <Box></Box>
-        {/* <ConnectButton /> */}
+        <ConnectButton />
       </Flex>
     </>
   );
