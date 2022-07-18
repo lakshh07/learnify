@@ -1,1 +1,2 @@
+export const courseAddress = "0xe3B1D9F32B64F7f34870193B41Cb1dF369E82636";
 export const questsAddress = "0x8837757bF4733aA1CF3C50cD601F50617F665FdA";

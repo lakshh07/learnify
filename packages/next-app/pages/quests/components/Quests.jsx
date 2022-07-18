@@ -435,5 +435,6 @@ function Courses() {
     </>
   );
 }
+// export const questsAddress = "0x8837757bF4733aA1CF3C50cD601F50617F665FdA";
 
 export default Courses;

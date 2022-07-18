@@ -19,6 +19,11 @@ import Blockies from "react-blockies";
 import { FiArrowUpRight } from "react-icons/fi";
 import { useRouter } from "next/router";
 
+import { useContractRead, useSigner, useWaitForTransaction } from "wagmi";
+import { questsAddress } from "../../../utils/contractAddress";
+import courseContractAbi from "../../../contracts/ABI/CourseFactory.json";
+import { ethers } from "ethers";
+
 function Courses() {
   const { setLoading } = useLoadingContext();
   const router = useRouter();
@@ -27,7 +32,23 @@ function Courses() {
     setTimeout(() => {
       setLoading(false);
     }, 1500);
+    console.log(fetchData);
   }, []);
+
+  const {
+    data: fetchData,
+    isError: fetchIsError,
+    isFetching,
+  } = useContractRead(
+    {
+      addressOrName: "0x07dC06DCBBdabfE2476D41d6a3Dfe27Db76fF5bc",
+      contractInterface: courseContractAbi,
+    },
+    "getDeployedCourses",
+    {
+      watch: true,
+    }
+  );
 
   const coursesList = [
     {
