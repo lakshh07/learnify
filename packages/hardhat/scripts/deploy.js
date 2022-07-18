@@ -2,16 +2,16 @@ const hre = require("hardhat");
 const fs = require("fs");
 
 async function main() {
-  const Greeter = await hre.ethers.getContractFactory("Greeter");
-  const greeter = await Greeter.deploy("Hello, Hardhat!");
+  const Quests = await hre.ethers.getContractFactory("Quests");
+  const quests = await Quests.deploy();
 
-  await greeter.deployed();
+  await quests.deployed();
 
-  console.log("Greeter deployed to:", greeter.address);
+  console.log("Quests deployed to:", quests.address);
 
   fs.writeFileSync(
     "../next-app/utils/contractAddress.js",
-    `export const greeterAddress = "${greeter.address}"`
+    `export const questsAddress = "${quests.address}"`
   );
 }
 

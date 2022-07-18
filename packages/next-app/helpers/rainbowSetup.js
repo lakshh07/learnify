@@ -7,7 +7,7 @@ export const { chains, provider } = configureChains(
   [
     // chain.mainnet,
     chain.polygonMumbai,
-    // chain.rinkeby,
+    chain.rinkeby,
     // chain.optimism,
     // chain.arbitrum,
     // chain.polygon,

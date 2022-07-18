@@ -1,1 +1,1 @@
-export const greeterAddress = "0xB9173435ca85644531F18eDDA7f15995cEBce89C";
+export const questsAddress = "0x8837757bF4733aA1CF3C50cD601F50617F665FdA";

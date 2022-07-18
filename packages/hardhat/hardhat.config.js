@@ -11,8 +11,8 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 });
 
 module.exports = {
-  solidity: "0.8.10",
-  defaultNetwork: "mumbai",
+  solidity: "0.8.15",
+  // defaultNetwork: "mumbai",
   networks: {
     hardhat: {
       chainId: 1337,
