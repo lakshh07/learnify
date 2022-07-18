@@ -45,7 +45,7 @@ function Navbar() {
                 _hover={{ color: "gray", transition: "color 0.2s ease" }}
                 fontWeight={
                   router.asPath === "/courses" ||
-                  router.asPath === "/courses/:id"
+                  router.asPath == "/courses/[id]"
                     ? 600
                     : 400
                 }

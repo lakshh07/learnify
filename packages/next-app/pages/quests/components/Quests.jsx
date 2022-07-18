@@ -9,6 +9,7 @@ import {
   Text,
   Flex,
   Progress,
+  Button,
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useLoadingContext } from "../../../context/loading";
@@ -19,9 +20,11 @@ import Blockies from "react-blockies";
 import { FiArrowUpRight } from "react-icons/fi";
 import { HiOutlineCash } from "react-icons/hi";
 import { GrMoney } from "react-icons/gr";
+import { useRouter } from "next/router";
 
 function Courses() {
   const { setLoading } = useLoadingContext();
+  const router = useRouter();
 
   useEffect(() => {
     setTimeout(() => {
@@ -82,27 +85,43 @@ function Courses() {
 
       <Container my={"4rem"} maxW={"1200px"}>
         <Box>
-          <Flex alignItems={"center"}>
-            <Heading fontSize={"2.25rem"} lineHeight={"2.5rem"}>
-              Quests
-            </Heading>
-            <Text
-              w={"2rem"}
-              alignItems={"center"}
-              justifyContent={"center"}
-              fontSize={"1.2rem"}
-              lineHeight={"2rem"}
-              bg={"black"}
-              color={"white"}
-              textAlign={"center"}
-              borderRadius={"50%"}
-              ml={"0.75rem"}
-              fontWeight={600}
+          <Flex alignItems={"center"} justifyContent={"space-between"}>
+            <Flex alignItems={"center"}>
+              <Heading fontSize={"2.25rem"} lineHeight={"2.5rem"}>
+                Quests
+              </Heading>
+              <Text
+                w={"2rem"}
+                alignItems={"center"}
+                justifyContent={"center"}
+                fontSize={"1.2rem"}
+                lineHeight={"2rem"}
+                bg={"black"}
+                color={"white"}
+                textAlign={"center"}
+                borderRadius={"50%"}
+                ml={"0.75rem"}
+                fontWeight={600}
+              >
+                {coursesList?.length}
+              </Text>
+            </Flex>
+            <Button
+              borderWidth={"2px"}
+              borderColor={"rgb(10 10 10/1)"}
+              borderRadius={"0.625rem"}
+              bg={"rgb(10 10 10/1)"}
+              py={"0.375rem"}
+              px={"1rem"}
+              colorScheme={"black"}
+              onClick={() => {
+                setLoading(true);
+                router.push("/quests/new");
+              }}
             >
-              {coursesList?.length}
-            </Text>
+              New Quest
+            </Button>
           </Flex>
-
           <Grid
             mt={"1.5rem"}
             templateColumns={"repeat(3, minmax(0px, 1fr))"}

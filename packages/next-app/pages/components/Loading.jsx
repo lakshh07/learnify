@@ -11,10 +11,11 @@ function Loading() {
       {loading && (
         <Box
           h={"100%"}
-          position={"absolute"}
+          position={"fixed"}
           bg={"rgba(255, 255, 255,0.96)"}
           zIndex={"999"}
           w={"100%"}
+          overflow={"hidden"}
         >
           <Box
             position={"fixed"}
