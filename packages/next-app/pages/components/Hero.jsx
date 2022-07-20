@@ -8,13 +8,13 @@ import {
 } from "@chakra-ui/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import React, { useEffect } from "react";
-import { useConnect } from "wagmi";
+import { useAccount } from "wagmi";
 import Stripes from "./Stripes";
 import { useLoadingContext } from "../../context/loading";
 import { useRouter } from "next/router";
 
 function Hero() {
-  const { isConnected } = useConnect();
+  const { isConnected } = useAccount();
   const toast = useToast();
   const { setLoading } = useLoadingContext();
   const router = useRouter();
@@ -28,6 +28,7 @@ function Hero() {
     setTimeout(() => {
       setLoading(false);
     }, 1500);
+    console.log(isConnected);
   }, []);
 
   useEffect(() => {

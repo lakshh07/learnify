@@ -1,26 +1,20 @@
-import { Box, Button, Divider, Flex, Heading, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Divider,
+  Flex,
+  Heading,
+  Image,
+  Text,
+} from "@chakra-ui/react";
 import React from "react";
 import Blockies from "react-blockies";
 import truncateMiddle from "truncate-middle";
 import { useRouter } from "next/router";
 
-function PullRequests({ setLoading, id }) {
+function PullRequests({ setLoading, id, requests }) {
   const router = useRouter();
 
-  const lists = [
-    {
-      heading: "Add new module",
-      description:
-        "Tummy tickling is a crucial part of forming a bond with your kitten, students of this course should be aware of it. This PR adds a module on tummy tickling for this reason.",
-      status: "approved",
-    },
-    {
-      heading: "Add new module",
-      description:
-        "Tummy tickling is a crucial part of forming a bond with your kitten, students of this course should be aware of it. This PR adds a module on tummy tickling for this reason.",
-      status: "open",
-    },
-  ];
   return (
     <>
       <Flex
@@ -46,7 +40,7 @@ function PullRequests({ setLoading, id }) {
             ml={"0.75rem"}
             fontWeight={600}
           >
-            {lists?.length}
+            {requests?.length}
           </Text>
         </Flex>
 
@@ -68,8 +62,8 @@ function PullRequests({ setLoading, id }) {
       </Flex>
       <Divider />
 
-      {lists &&
-        lists?.map((list, index) => {
+      {requests?.length ? (
+        requests?.map((list, index) => {
           return (
             <Box
               borderWidth={"2px"}
@@ -91,13 +85,9 @@ function PullRequests({ setLoading, id }) {
                   fontSize={"0.75rem"}
                   lineHeight={"1rem"}
                   fontWeight={600}
-                  bg={
-                    list.status === "approved"
-                      ? "rgb(183 234 213)"
-                      : "rgb(250 229 195)"
-                  }
+                  bg={list.approved ? "rgb(183 234 213)" : "rgb(250 229 195)"}
                 >
-                  {list.status}
+                  {list.approved ? "approved" : "open"}
                 </Text>
                 <Flex
                   borderWidth={"2px"}
@@ -116,7 +106,7 @@ function PullRequests({ setLoading, id }) {
                     overflow={"hidden"}
                   >
                     <Blockies
-                      seed={"0x7b1C1702A09521b4160f79f853b7F54ba6b35a59"}
+                      seed={list.author}
                       color="#dfe"
                       bgcolor="#aaa"
                       default="-1"
@@ -130,18 +120,13 @@ function PullRequests({ setLoading, id }) {
                     lineHeight={"1rem"}
                     fontWeight={600}
                   >
-                    {truncateMiddle(
-                      "0x7b1C1702A09521b4160f79f853b7F54ba6b35a59" || "",
-                      5,
-                      4,
-                      "..."
-                    )}
+                    {truncateMiddle(list.author || "", 5, 4, "...")}
                   </Text>
                 </Flex>
               </Flex>
 
               <Heading mt={"1em"} fontWeight={500} fontSize={"24px"}>
-                {list.heading}
+                {list.name}
               </Heading>
               <Text
                 fontSize={"16px"}
@@ -162,7 +147,7 @@ function PullRequests({ setLoading, id }) {
                   px={"0.75rem"}
                   bg={"#FFBDAA"}
                 >
-                  <Text fontWeight={500}>1 vote</Text>
+                  <Text fontWeight={500}>{list.approvers} vote</Text>
                 </Box>
                 <Button
                   borderWidth={"2px"}
@@ -182,7 +167,26 @@ function PullRequests({ setLoading, id }) {
               </Flex>
             </Box>
           );
-        })}
+        })
+      ) : (
+        <>
+          <Flex
+            my="5rem"
+            justifyContent="center"
+            flexDir="column"
+            alignItems="center"
+          >
+            <Image
+              src={"/assets/page-not-found.png"}
+              height={100}
+              width={100}
+            />
+            <Heading fontSize="1.5em" fontWeight={500} pt="1em">
+              No Pull Requests Found
+            </Heading>
+          </Flex>
+        </>
+      )}
     </>
   );
 }
