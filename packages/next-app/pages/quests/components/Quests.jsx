@@ -49,16 +49,12 @@ function Courses() {
     data: fetchData,
     isError: fetchIsError,
     isFetching,
-  } = useContractRead(
-    {
-      addressOrName: questsAddress,
-      contractInterface: questContractAbi,
-    },
-    "fetchQuest",
-    {
-      watch: true,
-    }
-  );
+  } = useContractRead({
+    addressOrName: questsAddress,
+    contractInterface: questContractAbi,
+    functionName: "fetchQuest",
+    watch: true,
+  });
 
   useEffect(() => {
     setLength(fetchData?.length);
