@@ -51,7 +51,7 @@ function Course() {
 
   useEffect(() => {
     setTimeout(() => {
-      setLoading(false);
+      // setLoading(false);
     }, 1500);
   }, []);
 
@@ -116,6 +116,7 @@ function Course() {
     const possibleVersions = Array.from(Array(version).keys());
     setAllCourseVersion(possibleVersions);
     setCourseVersion(version - 1);
+    setLoading(false);
     // console.log(allCourseVersion);
   };
 

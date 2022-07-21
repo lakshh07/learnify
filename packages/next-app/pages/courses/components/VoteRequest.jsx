@@ -5,25 +5,101 @@ import {
   Divider,
   Flex,
   Heading,
-  List,
-  ListIcon,
-  ListItem,
+  Spinner,
   Text,
+  useToast,
 } from "@chakra-ui/react";
-import React, { useEffect } from "react";
-import { BiCheckCircle } from "react-icons/bi";
+import React, { useEffect, useState } from "react";
 import { ImRadioChecked } from "react-icons/im";
 import { useLoadingContext } from "../../../context/loading";
 import Backward from "./Backward";
+import ReactMarkdown from "react-markdown";
+
+import courseContractAbi from "../../../contracts/ABI/CourseContract.json";
+import { getCourseContract } from "../../../utils/courseContract";
+import { useRouter } from "next/router";
+import { useContractWrite, useProvider, useWaitForTransaction } from "wagmi";
+import { getTextFromIPFS } from "../../../utils/ipfs";
 
 function VoteRequest() {
-  const status = "approved";
   const { setLoading } = useLoadingContext();
+  const router = useRouter();
+  const provider = useProvider();
+  const { id, rid } = router.query;
+  const toast = useToast();
+
+  const contract = getCourseContract(id, provider);
+
+  const [requestSummary, setRequestSummary] = useState();
+  const [request, setRequest] = useState();
 
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
     }, 1500);
+  }, []);
+
+  const getRequestSummary = async () => {
+    const [
+      [name, description],
+      author,
+      approved,
+      [bigTokens, bigApprovers, baseVersion],
+    ] = await contract.returnRequestSummary(rid);
+    const req = {
+      name,
+      description,
+      author,
+      approved,
+      index: Number(rid),
+      tokens: bigTokens.toNumber(),
+      approvers: bigApprovers.toNumber(),
+      baseVersion: baseVersion.toNumber(),
+    };
+
+    // console.log(req);
+    setRequestSummary(req);
+  };
+
+  const getRequest = async () => {
+    const modulesToReturn = [];
+    const [moduleNames, moduleDescs, moduleMaterials, moduleQuestions] =
+      await contract.returnRequestModules(rid);
+    for (let i = 0; i < moduleNames.length; i++) {
+      const mats = await getTextFromIPFS(moduleMaterials[i]);
+      const qs = await getTextFromIPFS(moduleQuestions[i]);
+      const moduleeee = {
+        id: 1,
+        name: moduleNames[i],
+        description: moduleDescs[i],
+        materials: mats,
+        questions: qs,
+      };
+      modulesToReturn.push(moduleeee);
+    }
+
+    // console.log(modulesToReturn);
+    setRequest(modulesToReturn);
+  };
+
+  const { data, write } = useContractWrite({
+    addressOrName: id,
+    contractInterface: courseContractAbi,
+    functionName: "voteRequest",
+    args: [rid],
+  });
+
+  const { isLoading, isSuccess } = useWaitForTransaction({
+    hash: data?.hash,
+  });
+
+  useEffect(() => {
+    getRequestSummary();
+  }, [isSuccess]);
+
+  useEffect(() => {
+    getRequestSummary();
+    getRequest();
   }, []);
 
   return (
@@ -42,6 +118,8 @@ function VoteRequest() {
             py={"0.375rem"}
             px={"1rem"}
             colorScheme={"black"}
+            isLoading={isLoading}
+            onClick={() => write()}
           >
             Vote to Request
           </Button>
@@ -60,14 +138,16 @@ function VoteRequest() {
           fontWeight={600}
           w={"max-content"}
           mt={"2.2em"}
-          bg={status === "approved" ? "rgb(183 234 213)" : "rgb(250 229 195)"}
+          bg={
+            requestSummary?.approved ? "rgb(183 234 213)" : "rgb(250 229 195)"
+          }
         >
-          {status}
+          {requestSummary?.approved ? "approved" : "open"}
         </Text>
 
         <Box my={"3em"}>
           <Heading fontSize={"34px"} fontWeight={600}>
-            Add tummy tickling module
+            {requestSummary?.name}
           </Heading>
           <Text
             fontSize={"18px"}
@@ -75,9 +155,7 @@ function VoteRequest() {
             mt={"10px"}
             color={"#111111"}
           >
-            Tummy tickling is a crucial part of forming a bond with your kitten,
-            students of this course should be aware of it. This PR adds a module
-            on tummy tickling for this reason.
+            {requestSummary?.description}
           </Text>
 
           <Flex mt={"1em"} alignItems={"center"}>
@@ -92,7 +170,7 @@ function VoteRequest() {
               mr={"0.5em"}
               fontWeight={500}
             >
-              1 votes
+              {requestSummary?.approvers} votes
             </Text>
             <Text
               borderWidth={"2px"}
@@ -105,7 +183,7 @@ function VoteRequest() {
               ml={"0.5em"}
               fontWeight={500}
             >
-              30 / 1000 requested share
+              {requestSummary?.tokens} / 1000 requested share
             </Text>
           </Flex>
         </Box>
@@ -115,49 +193,48 @@ function VoteRequest() {
             Modules
           </Heading>
           <Divider />
-          <Box
-            borderWidth={"2px"}
-            borderColor={"rgb(10 10 10/1)"}
-            borderRadius={"0.625rem"}
-            p={"1em 1.5em 1.4em"}
-            mt={"1em"}
-          >
-            <Text fontWeight={500} fontSize={"26px"}>
-              Scratching a kitten behind the ears
-            </Text>
-            <Text mt={"0.5em"} lineHeight={"28px"}>
-              Kittens just love to be scratched behind the ears, so learn how to
-              do it properly in this module
-            </Text>
 
-            <Heading mt={"1em"} fontWeight={600} fontSize={"24px"}>
-              Learning Materials
-            </Heading>
-            <Text lineHeight={"28px"} pl={"1.5em"} mt={"0.5em"}>
-              Make sure to use your index or ring finger, and gently scratch the
-              kitten behind the ears. Keep going until they love you!
-            </Text>
+          {request?.length ? (
+            request?.map((list, index) => {
+              return (
+                <Box
+                  borderWidth={"2px"}
+                  borderColor={"rgb(10 10 10/1)"}
+                  borderRadius={"0.625rem"}
+                  p={"1em 1.5em 1.4em"}
+                  mt={"1em"}
+                  key={index}
+                >
+                  <Text fontWeight={500} fontSize={"26px"}>
+                    {list.name}
+                  </Text>
+                  <Text mt={"0.5em"} lineHeight={"28px"}>
+                    {list.description}
+                  </Text>
 
-            <Heading fontWeight={600} mt={"1em"} fontSize={"24px"}>
-              Questions
-            </Heading>
-            <List spacing={1} pl={"1.5em"} mt={"0.5em"}>
-              <ListItem lineHeight={"28px"}>
-                <ListIcon as={ImRadioChecked} />
-                What part of your body should you use to scratch the kitten.
-              </ListItem>
-              <ListItem lineHeight={"28px"}>
-                {" "}
-                <ListIcon as={ImRadioChecked} />
-                What part of the kitten should you scratch
-              </ListItem>
-              <ListItem lineHeight={"28px"}>
-                {" "}
-                <ListIcon as={ImRadioChecked} />
-                How long should you do it for.
-              </ListItem>
-            </List>
-          </Box>
+                  <Heading mt={"1em"} fontWeight={600} fontSize={"24px"}>
+                    Learning Materials
+                  </Heading>
+                  <Text lineHeight={"28px"} pl={"1.5em"} mt={"0.5em"}>
+                    {list.materials}
+                  </Text>
+
+                  <Heading fontWeight={600} mt={"1em"} fontSize={"24px"}>
+                    Questions
+                  </Heading>
+                  <Box pl={"1.5em"} mt={"0.5em"}>
+                    <ReactMarkdown>{list.questions}</ReactMarkdown>
+                  </Box>
+                </Box>
+              );
+            })
+          ) : (
+            <>
+              <Flex my="10rem" justifyContent="center" alignItems="center">
+                <Spinner size="xl" />
+              </Flex>
+            </>
+          )}
         </Box>
       </Container>
     </>

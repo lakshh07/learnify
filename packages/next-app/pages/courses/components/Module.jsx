@@ -16,11 +16,12 @@ import MarkdownIt from "markdown-it";
 
 const mdParser = new MarkdownIt(/* Markdown-it options */);
 
-function Module() {
+function Module({ setCourseModuleList }) {
   const [moduleSave, setModuleSave] = useState(false);
 
   const onFinish = (values) => {
     console.log("Received values of form:", values);
+    setCourseModuleList(values.modules);
   };
 
   return (
