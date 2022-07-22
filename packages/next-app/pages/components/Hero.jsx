@@ -5,26 +5,29 @@ import {
   Box,
   useToast,
   Spinner,
+  Button,
 } from "@chakra-ui/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import Stripes from "./Stripes";
 import { useLoadingContext } from "../../context/loading";
 import { useRouter } from "next/router";
 
 function Hero() {
-  const { isConnected } = useAccount();
+  const { isConnected, isDisconnected } = useAccount();
   const toast = useToast();
   const { setLoading } = useLoadingContext();
   const router = useRouter();
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     document.addEventListener("mousemove", parallax);
+    console.log(isConnected);
   }, []);
 
   useEffect(() => {
-    router.prefetch("/courses");
+    router.prefetch("/membership");
     setTimeout(() => {
       setLoading(false);
     }, 1500);
@@ -39,7 +42,7 @@ function Hero() {
           status: "info",
           variant: "subtle",
           position: "top",
-          duration: 3000,
+          duration: 2800,
           icon: <Spinner />,
         });
         setTimeout(() => {
@@ -52,12 +55,16 @@ function Hero() {
           });
         }, 3000);
         setTimeout(() => {
-          setLoading(true);
-          router.push("/courses");
-        }, 6500);
+          // setLoading(true);
+          setVisible(true);
+          // router.push("/courses");
+        }, 6000);
       }, 1700);
     }
-  }, [isConnected]);
+    if (isDisconnected) {
+      setVisible(false);
+    }
+  }, [isConnected, isDisconnected]);
 
   function parallax(e) {
     document.querySelectorAll(".px-move").forEach(function (move) {
@@ -96,8 +103,26 @@ function Hero() {
             </Heading>
           </Flex>
 
-          <Box mt={"3em"}>
-            <ConnectButton label="Get Started" />
+          <Box mt={"3em"} align={"center"}>
+            <ConnectButton label="Sign In" />
+
+            <Button
+              borderWidth={"2px"}
+              borderColor={"rgb(10 10 10/1)"}
+              borderRadius={"0.625rem"}
+              bg={"rgb(10 10 10/1)"}
+              py={"0.375rem"}
+              px={"1rem"}
+              colorScheme={"black"}
+              mt={"2em"}
+              display={visible ? "block" : "none"}
+              onClick={() => {
+                setLoading(true);
+                router.push("/membership");
+              }}
+            >
+              Gets Started
+            </Button>
           </Box>
         </Flex>
       </Container>
