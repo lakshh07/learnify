@@ -33,7 +33,7 @@ function Navbar() {
           </Flex>
         </Link>
 
-        {router.asPath === "/" ? null : (
+        {router.asPath === "/" || router.asPath === "/membership" ? null : (
           <Flex alignItems={"center"}>
             <Link _hover={{ textDecoration: "none" }} href="/courses">
               <Text
