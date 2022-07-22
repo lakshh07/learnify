@@ -87,11 +87,11 @@ function NewCourse() {
     let materials = [];
     let questions = [];
 
-    for (const module of courseModuleList) {
-      names.push(module.moduleName);
-      descriptions.push(module.moduleDes);
-      const materialsURL = await newUploadMarkdownData(module.moduleMaterial);
-      const questionsURL = await newUploadMarkdownData(module.moduleQues);
+    for (const modulii of courseModuleList) {
+      names.push(modulii.moduleName);
+      descriptions.push(modulii.moduleDes);
+      const materialsURL = await newUploadMarkdownData(modulii.moduleMaterial);
+      const questionsURL = await newUploadMarkdownData(modulii.moduleQues);
       materials.push(materialsURL);
       questions.push(questionsURL);
     }

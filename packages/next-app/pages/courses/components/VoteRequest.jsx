@@ -28,8 +28,6 @@ function VoteRequest() {
   const { id, rid } = router.query;
   const toast = useToast();
 
-  const contract = getCourseContract(id, provider);
-
   const [requestSummary, setRequestSummary] = useState();
   const [request, setRequest] = useState();
 
@@ -40,6 +38,7 @@ function VoteRequest() {
   }, []);
 
   const getRequestSummary = async () => {
+    const contract = getCourseContract(id, provider);
     const [
       [name, description],
       author,
@@ -62,6 +61,7 @@ function VoteRequest() {
   };
 
   const getRequest = async () => {
+    const contract = getCourseContract(id, provider);
     const modulesToReturn = [];
     const [moduleNames, moduleDescs, moduleMaterials, moduleQuestions] =
       await contract.returnRequestModules(rid);

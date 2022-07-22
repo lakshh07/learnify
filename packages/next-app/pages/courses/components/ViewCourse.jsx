@@ -17,8 +17,6 @@ function ViewCourse() {
   const provider = useProvider();
   const { id, version } = router.query;
 
-  const contract = getCourseContract(id, provider);
-
   const [content, setContent] = useState();
   const [selectedContent, setSelectedContent] = useState(0);
 
@@ -29,6 +27,7 @@ function ViewCourse() {
   // }, []);
 
   const getModules = async () => {
+    const contract = getCourseContract(id, provider);
     const modulesToReturn = [];
     const returnedModules = await contract.returnModules(version);
     const [names, descriptions, materials, questions] = returnedModules;
