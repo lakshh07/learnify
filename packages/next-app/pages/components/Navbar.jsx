@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Flex, Heading, Image, Link, Text } from "@chakra-ui/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useRouter } from "next/router";
+import { useAccount } from "wagmi";
+import { useLoadingContext } from "../../context/loading";
 
 function Navbar() {
   const router = useRouter();
+  const { isDisconnected } = useAccount();
+  const { setLoading } = useLoadingContext();
+
+  useEffect(() => {
+    if (isDisconnected) {
+      setLoading(true);
+      router.replace("/");
+    }
+  }, [isDisconnected]);
 
   return (
     <>

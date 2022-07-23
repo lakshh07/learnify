@@ -14,11 +14,11 @@ import {
 import Backward from "./Backward";
 import Module from "./Module";
 
-import { newUploadMarkdownData, uploadToIpfs } from "../../../utils/ipfs";
-import { useSigner } from "wagmi";
+import { newUploadMarkdownData } from "../../../utils/ipfs";
+import { useSigner, useProvider, useContractRead } from "wagmi";
 import { getCourseContract } from "../../../utils/courseContract";
 import { useRouter } from "next/router";
-
+import courseContractAbi from "../../../contracts/ABI/CourseContract.json";
 function NewRequest() {
   const { setLoading } = useLoadingContext();
   const [moduleDetails, setModuleDetails] = useState({
@@ -28,9 +28,12 @@ function NewRequest() {
   });
   const [courseModuleList, setCourseModuleList] = useState([]);
   const [moduleLoading, setModuleLoading] = useState(false);
-  const [selectedVersion, setSelectedVersion] = useState();
+  const [selectedVersion, setSelectedVersion] = useState(0);
+  const [moduleSave, setModuleSave] = useState(true);
+  const [oldModuleDetails, setOldModuleDetails] = useState();
   const [versions, setVersions] = useState();
   const { data: signer } = useSigner();
+  const provider = useProvider();
   const toast = useToast();
   const router = useRouter();
   const { id } = router.query;
@@ -42,45 +45,45 @@ function NewRequest() {
     }));
   }
 
+  const { data } = useContractRead({
+    addressOrName: id,
+    contractInterface: courseContractAbi,
+    functionName: "index",
+    watch: true,
+  });
+
   const getModules = async (version) => {
-    const contract = await getCourseContract(id, signer);
+    const contract = getCourseContract(id, provider);
     const modulesToReturn = [];
-    const returnedModules = await contract.returnModules(version - 1);
-    const [names, descriptions, materials, questions] = returnedModules;
+    const [names, descriptions, materials, questions] =
+      await contract.returnModules(version);
     for (let i = 0; i < names.length; i++) {
-      const materialsText = await getTextFromIPFS(materials[i]);
-      const questionsText = await getTextFromIPFS(questions[i]);
       const modulee = {
         id: 1,
         name: names[i],
         description: descriptions[i],
-        materials: materialsText,
-        questions: questionsText,
+        materials: materials[i],
+        questions: questions[i],
       };
-      modulesToReturn.push(module);
+      modulesToReturn.push(modulee);
     }
-    setModules(modulesToReturn);
-    setIsLoading(false);
+    setOldModuleDetails(modulesToReturn);
+    return modulesToReturn;
   };
-
-  const getLatestVersion = async () => {
-    const contract = await getCourseContract(id, signer);
-    const version = await contract.index();
-    const versionInt = version.toNumber();
-    const possibleVersions = Array.from(Array(versionInt).keys());
-    setSelectedVersion(versionInt);
-    setVersions(possibleVersions);
-  };
-
-  useEffect(() => {
-    getLatestVersion();
-  }, []);
 
   const processModuleData = async () => {
+    let modulesToReturn = await getModules(selectedVersion);
     let names = [];
     let descriptions = [];
     let materials = [];
     let questions = [];
+
+    for (const i of modulesToReturn) {
+      names.push(i.name);
+      descriptions.push(i.description);
+      materials.push(i.materials);
+      questions.push(i.materials);
+    }
 
     for (const moduli of courseModuleList) {
       names.push(moduli.moduleName);
@@ -98,7 +101,8 @@ function NewRequest() {
     const { names, descriptions, materials, questions } =
       await processModuleData();
 
-    const contract = await getCourseContract(id, signer);
+    console.log(names, descriptions, materials, questions);
+    const contract = getCourseContract(id, signer);
 
     const tx = await contract.createRequest(
       moduleDetails.title,
@@ -114,6 +118,7 @@ function NewRequest() {
     setTimeout(() => {
       toast({
         title: "Transaction Success",
+        description: "wait for indexing",
         status: "success",
         variant: "subtle",
         position: "top",
@@ -133,6 +138,13 @@ function NewRequest() {
     }, 1500);
   }, []);
 
+  useEffect(() => {
+    console.log(data?.toNumber());
+    const possibleVersions = Array.from(Array(data?.toNumber()).keys());
+    setSelectedVersion(data?.toNumber() - 1);
+    setVersions(possibleVersions);
+  }, [id]);
+
   return (
     <>
       <Container my={"3.5em"} maxW={"1200px"}>
@@ -144,7 +156,7 @@ function NewRequest() {
         <Box mt={"2em"}>
           <FormControl>
             <FormLabel>Base Version</FormLabel>
-            <Input isDisabled placeholder={selectedVersion} />
+            <Input isDisabled placeholder={selectedVersion + 1} />
           </FormControl>
           <FormControl isRequired mt={"1em"}>
             <FormLabel>PR Title</FormLabel>
@@ -172,7 +184,10 @@ function NewRequest() {
           </FormControl>
         </Box>
 
-        <Module setCourseModuleList={setCourseModuleList} />
+        <Module
+          setModuleSave={setModuleSave}
+          setCourseModuleList={setCourseModuleList}
+        />
 
         <Button
           borderWidth={"2px"}
@@ -183,6 +198,7 @@ function NewRequest() {
           px={"1rem"}
           colorScheme={"black"}
           mt={"1.5em"}
+          isDisabled={moduleSave}
           isLoading={moduleLoading}
           onClick={createRequestHandler}
         >

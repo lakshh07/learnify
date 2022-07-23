@@ -63,6 +63,9 @@ function Hero() {
     }
     if (isDisconnected) {
       setVisible(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1500);
     }
   }, [isConnected, isDisconnected]);
 

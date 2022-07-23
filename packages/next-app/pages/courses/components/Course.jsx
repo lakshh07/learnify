@@ -185,7 +185,7 @@ function Course() {
             >
               <Box>
                 <Heading fontWeight={600}>
-                  {fetchCourse.length ? fetchCourse[0][0] : null}
+                  {fetchCourse?.length ? fetchCourse[0][0] : null}
                 </Heading>
               </Box>
 

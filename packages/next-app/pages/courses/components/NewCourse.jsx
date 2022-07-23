@@ -34,6 +34,7 @@ function NewCourse() {
   });
   const [courseModuleList, setCourseModuleList] = useState([]);
   const [courseLoading, setCourseLoading] = useState(false);
+  const [moduleSave, setModuleSave] = useState(true);
   const { data: signer } = useSigner();
   const toast = useToast();
   const router = useRouter();
@@ -135,6 +136,7 @@ function NewCourse() {
     setTimeout(() => {
       toast({
         title: "Transaction Success",
+        description: "wait for indexing..",
         status: "success",
         variant: "subtle",
         position: "top",
@@ -196,7 +198,10 @@ function NewCourse() {
         </Box>
 
         <Box>
-          <Module setCourseModuleList={setCourseModuleList} />{" "}
+          <Module
+            setModuleSave={setModuleSave}
+            setCourseModuleList={setCourseModuleList}
+          />{" "}
         </Box>
 
         <Button
@@ -209,7 +214,8 @@ function NewCourse() {
           colorScheme={"black"}
           mt={"1.5em"}
           onClick={letsCreateCourse}
-          isLoading={courseLoading}
+          // isLoading={courseLoading}
+          isDisabled={moduleSave}
         >
           Create
         </Button>

@@ -216,7 +216,7 @@ function VoteRequest() {
                     Learning Materials
                   </Heading>
                   <Text lineHeight={"28px"} pl={"1.5em"} mt={"0.5em"}>
-                    {list.materials}
+                    <ReactMarkdown>{list.materials}</ReactMarkdown>
                   </Text>
 
                   <Heading fontWeight={600} mt={"1em"} fontSize={"24px"}>

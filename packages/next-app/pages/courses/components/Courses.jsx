@@ -41,6 +41,7 @@ function Courses() {
     data: fetchData,
     isLoading,
     isFetched,
+    isFetching,
   } = useContractRead({
     addressOrName: "0x07dC06DCBBdabfE2476D41d6a3Dfe27Db76fF5bc",
     contractInterface: courseContractFactoryAbi,
