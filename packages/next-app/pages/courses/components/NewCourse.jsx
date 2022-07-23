@@ -20,6 +20,7 @@ import Module from "./Module";
 
 import { newUploadMarkdownData, uploadToIpfs } from "../../../utils/ipfs";
 import { useSigner } from "wagmi";
+import { courseFactoryAddress } from "../../../utils/contractAddress";
 import { getCourseFactoryContract } from "../../../utils/courseContract";
 import { useRouter } from "next/router";
 
@@ -117,7 +118,7 @@ function NewCourse() {
     console.log(names, descriptions, materials, questions);
     // console.log(imageUrl);
     const contract = await getCourseFactoryContract(
-      "0x07dC06DCBBdabfE2476D41d6a3Dfe27Db76fF5bc",
+      courseFactoryAddress,
       signer
     );
 
@@ -214,7 +215,7 @@ function NewCourse() {
           colorScheme={"black"}
           mt={"1.5em"}
           onClick={letsCreateCourse}
-          // isLoading={courseLoading}
+          isLoading={courseLoading}
           isDisabled={moduleSave}
         >
           Create

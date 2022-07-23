@@ -21,6 +21,7 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 import membershipAbi from "../../../contracts/ABI/LearnifyMembership.json";
+import { learnifyMembershipAddress } from "../../../utils/contractAddress";
 
 import { Steps } from "antd";
 
@@ -39,14 +40,14 @@ function Membership() {
   }, []);
 
   const { data } = useContractRead({
-    addressOrName: "0x26Cc006809F9f10DFfbcF959D0b3Bc8Cb368EC2A",
+    addressOrName: learnifyMembershipAddress,
     contractInterface: membershipAbi,
     functionName: "balanceOf",
     args: [address, 1],
   });
 
   const { data: postData, write } = useContractWrite({
-    addressOrName: "0x26Cc006809F9f10DFfbcF959D0b3Bc8Cb368EC2A",
+    addressOrName: learnifyMembershipAddress,
     contractInterface: membershipAbi,
     functionName: "mint",
     args: [address, 1, 1],

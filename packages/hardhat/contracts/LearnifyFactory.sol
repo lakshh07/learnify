@@ -1,7 +1,8 @@
-// SPDX-License-Identifier: GPL-3.0
+// SPDX-License-Identifier: MIT
 
 import "./LearnifyCourse.sol";
-pragma solidity >=0.7.0 <0.9.0;
+
+pragma solidity ^0.8.15;
 
 contract CourseFactory {
     //Init the array of deployed contract addresses

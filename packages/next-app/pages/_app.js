@@ -6,6 +6,7 @@ import { WagmiConfig } from "wagmi";
 import { wagmiClient, chains } from "../helpers/rainbowSetup";
 import LoadingContext from "../context/loading";
 import Loading from "./components/Loading";
+import Header from "./Header";
 import { useState } from "react";
 
 function MyApp({ Component, pageProps }) {
@@ -30,6 +31,7 @@ function MyApp({ Component, pageProps }) {
         <ChakraProvider>
           <LoadingContext.Provider value={{ loading, setLoading }}>
             <Loading />
+            <Header />
             <Component {...pageProps} />
           </LoadingContext.Provider>
         </ChakraProvider>

@@ -56,24 +56,19 @@ function NewQuest() {
     isLoading: postIsLoading,
     isSuccess: postIsSuccess,
     write,
-  } = useContractWrite(
-    {
-      addressOrName: questsAddress,
-      contractInterface: questContractAbi,
-      functionName: "createQuest",
-    },
-    "createQuest",
-    {
-      args: [
-        uuidv4(),
-        questData.title,
-        questData.description,
-        (questData.price * Math.pow(10, 18)).toString(),
-        (questData.goal * Math.pow(10, 18)).toString(),
-        questData.fee,
-      ],
-    }
-  );
+  } = useContractWrite({
+    addressOrName: questsAddress,
+    contractInterface: questContractAbi,
+    functionName: "createQuest",
+    args: [
+      uuidv4(),
+      questData.title,
+      questData.description,
+      (questData.price * Math.pow(10, 18)).toString(),
+      (questData.goal * Math.pow(10, 18)).toString(),
+      questData.fee,
+    ],
+  });
 
   const { data, isError, isLoading, isFetched, isSuccess } =
     useWaitForTransaction({

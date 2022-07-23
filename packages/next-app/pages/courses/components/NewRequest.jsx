@@ -82,7 +82,7 @@ function NewRequest() {
       names.push(i.name);
       descriptions.push(i.description);
       materials.push(i.materials);
-      questions.push(i.materials);
+      questions.push(i.questions);
     }
 
     for (const moduli of courseModuleList) {
@@ -141,8 +141,10 @@ function NewRequest() {
   useEffect(() => {
     console.log(data?.toNumber());
     const possibleVersions = Array.from(Array(data?.toNumber()).keys());
+    // data?.toNumber === 0
+    //   ? setSelectedVersion(data?.toNumber())
     setSelectedVersion(data?.toNumber() - 1);
-    setVersions(possibleVersions);
+    setVersions(data?.toNumber());
   }, [id]);
 
   return (
@@ -156,7 +158,7 @@ function NewRequest() {
         <Box mt={"2em"}>
           <FormControl>
             <FormLabel>Base Version</FormLabel>
-            <Input isDisabled placeholder={selectedVersion + 1} />
+            <Input isDisabled placeholder={versions} />
           </FormControl>
           <FormControl isRequired mt={"1em"}>
             <FormLabel>PR Title</FormLabel>

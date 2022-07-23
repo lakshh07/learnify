@@ -21,7 +21,7 @@ import { FiArrowUpRight } from "react-icons/fi";
 import { useRouter } from "next/router";
 
 import { useContractRead, useProvider } from "wagmi";
-// import { courseAddress } from "../../../utils/contractAddress";
+import { courseFactoryAddress } from "../../../utils/contractAddress";
 import courseContractFactoryAbi from "../../../contracts/ABI/CourseFactory.json";
 import { getCourseContract } from "../../../utils/courseContract";
 
@@ -43,7 +43,7 @@ function Courses() {
     isFetched,
     isFetching,
   } = useContractRead({
-    addressOrName: "0x07dC06DCBBdabfE2476D41d6a3Dfe27Db76fF5bc",
+    addressOrName: courseFactoryAddress,
     contractInterface: courseContractFactoryAbi,
     functionName: "getDeployedCourses",
     watch: true,

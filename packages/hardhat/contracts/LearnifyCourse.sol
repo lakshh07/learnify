@@ -1,8 +1,6 @@
-// contract testing
+// SPDX-License-Identifier: MIT
 
-// SPDX-License-Identifier: GPL-3.0
-
-pragma solidity >=0.7.0 <0.9.0;
+pragma solidity ^0.8.15;
 
 contract CourseContract {
     struct Edit {
@@ -206,8 +204,8 @@ contract CourseContract {
         requestIndex++;
     }
 
-    function voteRequest(uint256 ID) external restricted {
-        require(maintainerVotes[ID][msg.sender] != true);
+    function voteRequest(uint256 ID) external {
+        // require(maintainerVotes[ID][msg.sender] != true);
         maintainerVotes[ID][msg.sender] = true;
         Request storage request = listOfRequests[ID];
         request.approvers++;
