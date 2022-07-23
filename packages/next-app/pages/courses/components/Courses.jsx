@@ -73,7 +73,7 @@ function Courses() {
 
   useEffect(() => {
     getCourseSummaries();
-  }, [isFetched]);
+  }, [isFetching]);
 
   return (
     <>

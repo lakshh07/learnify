@@ -10,6 +10,8 @@ import { getCourseContract } from "../../../utils/courseContract";
 import { useRouter } from "next/router";
 import { useProvider } from "wagmi";
 import { getTextFromIPFS } from "../../../utils/ipfs";
+import parse from "html-react-parser";
+import DOMPurify from "isomorphic-dompurify";
 
 function ViewCourse() {
   const { setLoading, loading } = useLoadingContext();
@@ -52,6 +54,14 @@ function ViewCourse() {
   useEffect(() => {
     getModules();
   }, []);
+
+  const htmlFrom = (htmlString) => {
+    const cleanHtmlString = DOMPurify.sanitize(htmlString, {
+      USE_PROFILES: { html: true },
+    });
+    const html = parse(cleanHtmlString);
+    return html;
+  };
 
   return (
     <>
@@ -106,17 +116,20 @@ function ViewCourse() {
             <Heading mt={"1em"} fontWeight={600} fontSize={"24px"}>
               Learning Materials
             </Heading>
-            <Text lineHeight={"28px"} pl={"1.5em"} mt={"0.5em"}>
-              {content && content[selectedContent]?.materials}
-            </Text>
+            <Box pl={"1.5em"} mt={"0.5em"}>
+              {content && htmlFrom(content[selectedContent]?.materials)}
+            </Box>
+            {/* <Text lineHeight={"28px"} pl={"1.5em"} mt={"0.5em"}> */}
+
+            {/* </Text> */}
 
             <Heading fontWeight={600} mt={"1em"} fontSize={"24px"}>
               Questions
             </Heading>
             <Box pl={"1.5em"} mt={"0.5em"}>
-              <ReactMarkdown>
-                {content && content[selectedContent]?.questions}
-              </ReactMarkdown>
+              {/* <ReactMarkdown> */}
+              {content && htmlFrom(content[selectedContent]?.questions)}
+              {/* </ReactMarkdown> */}
             </Box>
           </Box>
         )}

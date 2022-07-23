@@ -6,6 +6,8 @@ import {
   Container,
   Heading,
   Image,
+  Link,
+  Text,
   useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
@@ -39,7 +41,7 @@ function Membership() {
     }, 1500);
   }, []);
 
-  const { data } = useContractRead({
+  const { data, isFetched } = useContractRead({
     addressOrName: learnifyMembershipAddress,
     contractInterface: membershipAbi,
     functionName: "balanceOf",
@@ -96,11 +98,21 @@ function Membership() {
   };
 
   useEffect(() => {
+    console.log(data?.toNumber());
+    console.log(current);
+
+    data?.toNumber() === 0 &&
+      setTimeout(() => {
+        setCurrent(1);
+      }, 4000);
+  }, [setCurrent, isFetched]);
+
+  useEffect(() => {
     data?.toNumber() >= 1 &&
       setTimeout(() => {
         setCurrent(2);
-      }, 3500);
-  });
+      }, 4000);
+  }, [setCurrent, isFetched]);
 
   const firstContent = () => {
     return (
@@ -119,11 +131,15 @@ function Membership() {
   const secondContent = () => {
     return (
       <Box my={"4rem"} align={"center"}>
+        <Text fontSize={"0.875rem"} lineHeight={"1.25rem"} color={"#888888"}>
+          Looks like you dont have membership badge
+        </Text>
         <Heading
           textTransform={"capitalize"}
           fontWeight={600}
           fontSize={"2.25rem"}
           lineHeight={"2.5rem"}
+          mt={"0.5em"}
         >
           Mint your free Learnify Membership NFT
         </Heading>
@@ -157,7 +173,20 @@ function Membership() {
           You have got your membership badge!!
         </Heading>
 
-        <Image src={"/assets/badge.png"} boxSize={"150px"} />
+        <Link
+          href="https://testnets.opensea.io/assets/mumbai/0x9ea3185c2f9ebe422d8c305a40fd7a00369c3f8d/1"
+          isExternal
+          w={"min-content"}
+        >
+          <Image
+            position={"relative"}
+            top={"0px"}
+            _hover={{ top: "-2px" }}
+            className="h-shadow-black-high"
+            src={"/assets/badge.png"}
+            boxSize={"150px"}
+          />
+        </Link>
 
         <Button
           borderWidth={"2px"}

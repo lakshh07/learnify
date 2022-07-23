@@ -49,6 +49,7 @@ function Courses() {
     data: fetchData,
     isError: fetchIsError,
     isFetching,
+    isLoading: loading,
   } = useContractRead({
     addressOrName: questsAddress,
     contractInterface: questContractAbi,
@@ -150,7 +151,7 @@ function Courses() {
             </Button>
           </Flex>
 
-          {isFetching ? (
+          {loading ? (
             <>
               <Flex my="10rem" justifyContent="center" alignItems="center">
                 <Spinner size="xl" />

@@ -148,7 +148,7 @@ function NewCourse() {
     setTimeout(() => {
       setLoading(true);
       router.push("/courses");
-    }, 1000);
+    }, 3000);
   }
 
   return (
