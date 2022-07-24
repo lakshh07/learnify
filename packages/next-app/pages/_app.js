@@ -5,12 +5,17 @@ import { lightTheme, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { WagmiConfig } from "wagmi";
 import { wagmiClient, chains } from "../helpers/rainbowSetup";
 import LoadingContext from "../context/loading";
+import CeramicDataContext from "../context/ceramicData";
 import Loading from "./components/Loading";
 import Header from "./Header";
 import { useState } from "react";
 
 function MyApp({ Component, pageProps }) {
   const [loading, setLoading] = useState(true);
+  const [ceramicData, setCeramicData] = useState({
+    did: "",
+    idx: "",
+  });
 
   const appInfo = {
     appName: "Learnify",
@@ -30,9 +35,13 @@ function MyApp({ Component, pageProps }) {
       >
         <ChakraProvider>
           <LoadingContext.Provider value={{ loading, setLoading }}>
-            <Loading />
-            <Header />
-            <Component {...pageProps} />
+            <CeramicDataContext.Provider
+              value={{ ceramicData, setCeramicData }}
+            >
+              <Loading />
+              <Header />
+              <Component {...pageProps} />
+            </CeramicDataContext.Provider>
           </LoadingContext.Provider>
         </ChakraProvider>
       </RainbowKitProvider>

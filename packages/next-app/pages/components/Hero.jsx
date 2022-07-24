@@ -13,11 +13,14 @@ import { useAccount } from "wagmi";
 import Stripes from "./Stripes";
 import { useLoadingContext } from "../../context/loading";
 import { useRouter } from "next/router";
+import { client } from "../../utils/data";
+import { useCeramicContext } from "../../context/ceramicData";
 
 function Hero() {
   const { isConnected, isDisconnected } = useAccount();
   const toast = useToast();
   const { setLoading } = useLoadingContext();
+  const { setCeramicData, ceramicData } = useCeramicContext();
   const router = useRouter();
   const [visible, setVisible] = useState(false);
 
@@ -33,6 +36,21 @@ function Hero() {
     }, 1500);
     console.log(isConnected);
   }, []);
+
+  async function connect() {
+    const cdata = await client();
+    const { did, idx, error } = cdata;
+    console.log(did, idx, error);
+
+    const data = await idx.get("basicProfile", did.id);
+    console.log(data);
+
+    setCeramicData({ did: did, idx: idx });
+    const user = { name: "Anonymous", bio: "😈" };
+
+    !data && (await idx.set("basicProfile", user));
+    // console.log("fonr");
+  }
 
   useEffect(() => {
     if (isConnected) {
@@ -55,10 +73,8 @@ function Hero() {
           });
         }, 3000);
         setTimeout(() => {
-          // setLoading(true);
-          setVisible(true);
-          // router.push("/courses");
-        }, 6000);
+          connect();
+        }, 2000);
       }, 1700);
     }
     if (isDisconnected) {
@@ -68,6 +84,12 @@ function Hero() {
       }, 1500);
     }
   }, [isConnected, isDisconnected]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      ceramicData.did && ceramicData.idx && setVisible(true);
+    }, 500);
+  }, [ceramicData]);
 
   function parallax(e) {
     document.querySelectorAll(".px-move").forEach(function (move) {

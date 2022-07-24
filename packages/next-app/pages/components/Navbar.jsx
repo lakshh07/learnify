@@ -7,7 +7,7 @@ import { useLoadingContext } from "../../context/loading";
 
 function Navbar() {
   const router = useRouter();
-  const { isDisconnected } = useAccount();
+  const { isDisconnected, address } = useAccount();
   const { setLoading } = useLoadingContext();
 
   useEffect(() => {
@@ -69,12 +69,28 @@ function Navbar() {
                 fontSize={"1.125rem"}
                 color={"#0a0a0a"}
                 lineHeight={"1.625rem"}
-                ml={"1em"}
+                mx={"1em"}
                 transition="color 0.2s ease"
                 _hover={{ color: "gray", transition: "color 0.2s ease" }}
                 fontWeight={router.asPath === "/quests" ? 600 : 400}
               >
                 Quests
+              </Text>
+            </Link>
+            <Link
+              href={`/profile/${address}`}
+              _hover={{ textDecoration: "none" }}
+            >
+              <Text
+                fontSize={"1.125rem"}
+                color={"#0a0a0a"}
+                lineHeight={"1.625rem"}
+                ml={"1em"}
+                transition="color 0.2s ease"
+                _hover={{ color: "gray", transition: "color 0.2s ease" }}
+                fontWeight={router.asPath === `/profile/${address}` ? 600 : 400}
+              >
+                Profile
               </Text>
             </Link>
           </Flex>
