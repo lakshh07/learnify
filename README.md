@@ -1,65 +1,23 @@
-# 🦄 Web3 Starter Kit
+<style>
+    .rotate {
+        animation: spin 12s linear infinite;
+    }
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
 
-A quick starter to build on Ethereum and Polygon! 💜
->Stack used Next.js, Chakra-UI, Hardhat, Rainbow Wallet, Wagmi 🚀
+# <img class="rotate" src="packages/next-app/public/logo.png" height="20" alt="Learnify Logo"> Learnify
 
-<br/>
-
-![image](https://bafybeifacspez7tdlba5auczy5qqpqg3mhyakhorp4jvjesyeiaxn33gwm.ipfs.dweb.link/cover.png)
-
-<br/>
-
-
-# 🏄‍♂️ Quick Start
-
-Prerequisites: [Node (v16 LTS)](https://nodejs.org/en/download/) plus [Yarn](https://classic.yarnpkg.com/en/docs/install/) and [Git](https://git-scm.com/downloads)
-
-> clone/fork 🦄 web3-starter-kit:
-
-```bash
-git clone https://github.com/lakshh07/Web3-Starter-Kit.git
-```
-
-> install your 👷‍ dependencies:
-
-```bash
-cd web3-starter-kit
-yarn install
-```
-
-> in a second terminal window, start your 📱 frontend:
-
-```bash
-cd web3-starter-kit
-yarn dev
-```
->Contract are deployed on Polygon Mumbai
-
-<br/>
-🔏 Edit your smart contract `Greeter.sol` in `packages/hardhat/contracts`
-
-📝 Edit your frontend `index.js` in `packages/next-app/pages/`
-
-💼 Edit your deployment scripts `deploy.js` in `packages/hardhat/scripts`
-
-📱 Open http://localhost:3000 to see the app
-
-🌍 You need an RPC key for testnets and production deployments, create an [Alchemy](https://www.alchemy.com/) account and replace the value of `ALCHEMY_KEY = xxx` in `packages/hardhat/.env` with your new key.
+✨
+An education platform allowing projects to outsource and incentives for the creation of high-quality learning materials.
+✨
 
 <br/>
 
-# 📚 Learn More
-
-Solidity: https://docs.soliditylang.org/en/v0.8.14/
-<br/>
-Next.js: https://nextjs.org/docs
-<br/>
-ChakraUI: https://chakra-ui.com/docs/components/overview
-<br/>
-Hardhat: https://hardhat.org/getting-started/
-<br/>
-Rainbow Kit: https://www.rainbowkit.com/docs/introduction <br/>
-Wagmi: https://wagmi.sh/docs/getting-started
-<br/>
-Ether.js: https://docs.ethers.io/v5/
-
+<img src="packages/next-app/public/assets/learnify.png" alt="learnify" border="2">
